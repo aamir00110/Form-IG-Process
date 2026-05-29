@@ -1,0 +1,120 @@
+DECLARE
+v_line_id number;
+BEGIN
+  CASE :APEX$ROW_STATUS
+    /* ========= INSERT ========= */
+    WHEN 'C' THEN
+     
+	 select NVL(MAX(LINE_ID),0)+1
+	 INTO	v_line_id
+	 FROM PWC_MFG_WASH_RECIPE_L
+	 
+            INSERT INTO PWC_MFG_WASH_RECIPE_L (
+            
+			
+				LINE_ID,
+				HEADER_ID,
+				MINOR_OPERATIONS,
+				MAJOR_OPERATIONS,
+				MAJOR_OP_ID,
+				SMV,
+				TEMPERATURE,
+				WATER,
+				MIN_TIME,
+				SEQ,
+				INTENSITY,
+				WASH_TYPE,
+				REMARKS,
+				PER_BATCH_QUANTITY,
+				NUMBER_BATCHES,
+				COMMENTS,
+				RECIPE_PREPARER,
+				LAST_UPDATE_DATE,
+				LAST_UPDATED_BY,
+				CREATION_DATE,
+				CREATED_BY,
+				NONOPERATION_TIME,
+				EIM_SCORE,
+				DRY_PROCESS_SMV,
+				WATER_RATIO
+
+      )
+      VALUES (
+	  		
+            v_line_id,
+			:HEADER_ID,
+			:MINOR_OPERATIONS,
+			:MAJOR_OPERATIONS,
+			:MAJOR_OP_ID,
+			:SMV,
+			:TEMPERATURE,
+			:WATER,
+			:MIN_TIME,
+			:SEQ,
+			:INTENSITY,
+			:WASH_TYPE,
+			:REMARKS,
+			:PER_BATCH_QUANTITY,
+			:NUMBER_BATCHES,
+			:COMMENTS,
+			:RECIPE_PREPARER,
+			SYSDATE,
+			723155,
+			SYSDATE,
+			723155,
+			:NONOPERATION_TIME,
+			:EIM_SCORE,
+			:DRY_PROCESS_SMV,
+			:WATER_RATIO
+
+			)
+            RETURNING LINE_ID INTO :LINE_ID;
+
+     
+    /* ========= UPDATE ========= */
+    WHEN 'U' THEN
+
+      UPDATE PWC_MFG_WASH_RECIPE_L
+      SET 
+			LINE_ID          	=:LINE_ID,
+			HEADER_ID          	=:HEADER_ID,
+			MINOR_OPERATIONS    =:MINOR_OPERATIONS,
+			MAJOR_OPERATIONS    =:MAJOR_OPERATIONS,
+			MAJOR_OP_ID         =:MAJOR_OP_ID,
+			SMV          		=:SMV,
+			TEMPERATURE         =:TEMPERATURE,
+			WATER          		=:WATER,
+			MIN_TIME          	=:MIN_TIME,
+			SEQ          		=:SEQ,
+			INTENSITY          	=:INTENSITY,
+			WASH_TYPE          	=:WASH_TYPE,
+			REMARKS          	=:REMARKS,
+			PER_BATCH_QUANTITY  =:PER_BATCH_QUANTITY,
+			NUMBER_BATCHES      =:NUMBER_BATCHES,
+			COMMENTS          	=:COMMENTS,
+			RECIPE_PREPARER     =:RECIPE_PREPARER,
+			LAST_UPDATE_DATE    =:LAST_UPDATE_DATE,
+			LAST_UPDATED_BY     =:LAST_UPDATED_BY,
+			CREATION_DATE       =:CREATION_DATE,
+			CREATED_BY          =:CREATED_BY,
+			NONOPERATION_TIME   =:NONOPERATION_TIME,
+			EIM_SCORE          	=:EIM_SCORE,
+			DRY_PROCESS_SMV     =:DRY_PROCESS_SMV,
+			WATER_RATIO         =:WATER_RATIO
+
+
+
+      WHERE LINE_ID = :LINE_ID;
+
+    /* ========= DELETE ========= */
+    WHEN 'D' THEN
+
+      DELETE FROM PWC_MFG_WASH_RECIPE_L
+      WHERE LINE_ID = :LINE_ID;
+
+  END CASE;
+
+EXCEPTION
+  WHEN OTHERS THEN
+    RAISE_APPLICATION_ERROR(-20010, 'IG Process Error: ' || SQLERRM);
+END;

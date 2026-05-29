@@ -1,0 +1,160 @@
+
+
+<div class="attendance-container">
+    <div class="attendance-grid">
+        <!-- Camera Card -->
+        <div class="camera-card">
+            <div class="camera-feed">
+                <video id="live-camera" autoplay playsinline></video>
+                <div class="scan-overlay"></div>
+            </div>
+            <div style="padding: 15px; text-align: center;">
+                <button id="btn-capture" class="btn-action" style="background: #667eea; width: 100%;">
+                    📸 CAPTURE PHOTO
+                </button>
+            </div>
+        </div>
+        
+        <!-- Date & Time Card -->
+        <div class="time-card">
+            <div style="font-size: 18px; margin-bottom: 10px;">📅 &nbsp; <span id="P2_CURRENT_DATE"></span></div>
+            <div class="time-digits" id="P2_CURRENT_TIME"></div>
+            <div style="margin-top: 10px;">📍 <span id="P2_CURRENT_DAY"></span></div>
+        </div>
+    </div>
+    
+    <!-- QR Scanner Section -->
+    <div class="qr-card" style="margin-bottom: 20px;">
+        <h3 style="color: #667eea; margin-bottom: 15px;">📱 QR / RFID SCANNER</h3>
+        <div class="scanner-frame scanner-active">
+            <div id="qr-reader"></div>
+        </div>
+        <div style="margin-top: 20px;">
+            <label style="font-weight: 600;">OR Enter Employee Code:</label>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <input type="text" id="manual-emp-code" placeholder="Enter Employee Code" 
+                       style="flex: 1; padding: 10px; border: 2px solid #e0e0e0; border-radius: 10px;">
+                <button id="btn-verify" class="btn-action" style="background: #667eea;">VERIFY</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Employee Information Card -->
+    <div class="employee-card" style="margin-bottom: 20px;">
+        <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+            <div class="employee-avatar">
+                <img id="emp-photo-img" src="#" alt="Employee Photo" 
+                     style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div style="flex: 1;">
+                <h3 id="P2_EMP_NAME" style="margin: 0 0 5px 0;">--</h3>
+                <p style="margin: 5px 0;">Code: <strong id="P2_EMP_CODE">--</strong></p>
+                <p style="margin: 5px 0;">Dept: <strong id="P2_EMP_DEPT">--</strong></p>
+                <p style="margin: 5px 0;">Status: <span style="color: #4caf50;">✅ Active</span></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Today's Attendance & Statistics -->
+    <div class="attendance-grid">
+        <!-- Today's Attendance Card -->
+        <div class="attendance-info">
+            <h3 style="color: #667eea; margin-bottom: 15px;">📋 TODAY'S ATTENDANCE</h3>
+            <div class="info-row">
+                <span class="info-label">Check-in:</span>
+                <span class="info-value" id="P2_CHECK_IN_TIME">--:--</span>
+                <span class="photo-status" id="in-photo-status">📸 ❌</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Check-out:</span>
+                <span class="info-value" id="P2_CHECK_OUT_TIME">--:--</span>
+                <span class="photo-status" id="out-photo-status">📸 ❌</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Total Hours:</span>
+                <span class="info-value" id="P2_TOTAL_HOURS">0.00</span>
+            </div>
+        </div>
+        
+        <!-- Quick Statistics Card -->
+        <div class="attendance-info">
+            <h3 style="color: #667eea; margin-bottom: 15px;">📊 QUICK STATISTICS</h3>
+            <div class="stat-card" style="margin-bottom: 10px;">
+                <div class="stat-number" id="P2_TODAY_PRESENT">0</div>
+                <div class="stat-label">Today's Present</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="stat-card">
+                    <div class="stat-number" id="P2_TOTAL_EMPLOYEES">0</div>
+                    <div class="stat-label">Total Employees</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="P2_ATTENDANCE_RATE">0%</div>
+                    <div class="stat-label">Attendance Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="P2_LATE_COMERS">0</div>
+                    <div class="stat-label">Late Comers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="P2_EARLY_LEFT">0</div>
+                    <div class="stat-label">Early Left</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="action-buttons" style="margin: 20px 0;">
+        <button id="btn-checkin" class="btn-action btn-checkin" onclick="checkIn()">
+            🟢 CHECK-IN
+        </button>
+        <button id="btn-checkout" class="btn-action btn-checkout" onclick="checkOut()" disabled>
+            🔴 CHECK-OUT
+        </button>
+        <button id="btn-history" class="btn-action btn-history" onclick="viewHistory()">
+            📊 VIEW HISTORY
+        </button>
+        <button id="btn-reset" class="btn-action btn-reset" onclick="resetForm()">
+            🔄 RESET
+        </button>
+    </div>
+    
+    <!-- Hidden APEX Items -->
+    <input type="hidden" id="P2_EMP_ID" value="">
+    <input type="hidden" id="P2_EMP_CODE" value="">
+    <input type="hidden" id="P2_PHOTO_BLOB" value="">
+    <input type="hidden" id="P2_CURRENT_DATE" value="">
+    <input type="hidden" id="P2_CURRENT_TIME" value="">
+    <input type="hidden" id="P2_CURRENT_DAY" value="">
+    <input type="hidden" id="P2_EMP_NAME" value="">
+    <input type="hidden" id="P2_EMP_DEPT" value="">
+    <input type="hidden" id="P2_CHECK_IN_TIME" value="">
+    <input type="hidden" id="P2_CHECK_OUT_TIME" value="">
+    <input type="hidden" id="P2_TOTAL_HOURS" value="">
+    <input type="hidden" id="P2_TODAY_PRESENT" value="">
+    <input type="hidden" id="P2_TOTAL_EMPLOYEES" value="">
+    <input type="hidden" id="P2_ATTENDANCE_RATE" value="">
+    <input type="hidden" id="P2_LATE_COMERS" value="">
+    <input type="hidden" id="P2_EARLY_LEFT" value="">
+</div>
+
+<script>
+    // Sync APEX items with display elements
+    setInterval(() => {
+        document.getElementById('P2_CURRENT_DATE').innerText = apex.item("P2_CURRENT_DATE").getValue();
+        document.getElementById('P2_CURRENT_TIME').innerText = apex.item("P2_CURRENT_TIME").getValue();
+        document.getElementById('P2_CURRENT_DAY').innerText = apex.item("P2_CURRENT_DAY").getValue();
+        document.getElementById('P2_EMP_NAME').innerText = apex.item("P2_EMP_NAME").getValue();
+        document.getElementById('P2_EMP_CODE').innerText = apex.item("P2_EMP_CODE").getValue();
+        document.getElementById('P2_EMP_DEPT').innerText = apex.item("P2_EMP_DEPT").getValue();
+        document.getElementById('P2_CHECK_IN_TIME').innerText = apex.item("P2_CHECK_IN_TIME").getValue();
+        document.getElementById('P2_CHECK_OUT_TIME').innerText = apex.item("P2_CHECK_OUT_TIME").getValue();
+        document.getElementById('P2_TOTAL_HOURS').innerText = apex.item("P2_TOTAL_HOURS").getValue();
+        document.getElementById('P2_TODAY_PRESENT').innerText = apex.item("P2_TODAY_PRESENT").getValue();
+        document.getElementById('P2_TOTAL_EMPLOYEES').innerText = apex.item("P2_TOTAL_EMPLOYEES").getValue();
+        document.getElementById('P2_ATTENDANCE_RATE').innerText = apex.item("P2_ATTENDANCE_RATE").getValue();
+        document.getElementById('P2_LATE_COMERS').innerText = apex.item("P2_LATE_COMERS").getValue();
+        document.getElementById('P2_EARLY_LEFT').innerText = apex.item("P2_EARLY_LEFT").getValue();
+    }, 100);
+</script>
